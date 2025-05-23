@@ -74,7 +74,7 @@ public class CrucigramaApp extends Application{
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                Label label = new Label((matriz[i][j] == ' ' ? "." : String.valueOf(matriz[i][j])));
+                Label label = new Label((matriz[i][j] == ' ' ? " " : String.valueOf(matriz[i][j])));
                 label.setMinSize(25, 25);
                 label.setStyle("-fx-border-color: #000; -fx-alignment: center;");
                 grid.add(label, j, i);
