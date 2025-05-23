@@ -1,0 +1,92 @@
+package com.windowsxp.crucigrama.crucigramagui_xp;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+public class CrucigramaApp extends Application{
+    private TextArea inputPalabras;
+    private TextField inputTamanio;
+    private GridPane grid;
+
+    public static void main(String[] args) {
+        launch(args); // Ejecuta la aplicación JavaFX
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Generador de Crucigrama");
+
+        // Área de ingreso de palabras
+        inputPalabras = new TextArea();
+        inputPalabras.setPromptText("Ingresa palabras separadas por coma (mín. 4)");
+
+        // Campo de tamaño del crucigrama
+        inputTamanio = new TextField();
+        inputTamanio.setPromptText("Tamaño mínimo 10 (opcional)");
+
+        // Botón generar
+        Button generarBtn = new Button("Generar Crucigrama");
+        generarBtn.setOnAction(e -> generarCrucigrama());
+
+        // Cuadro para mostrar la matriz
+        grid = new GridPane();
+        grid.setPadding(new Insets(10));
+        grid.setHgap(5);
+        grid.setVgap(5);
+
+        VBox layout = new VBox(10, inputPalabras, inputTamanio, generarBtn, new ScrollPane(grid));
+        layout.setPadding(new Insets(15));
+
+        primaryStage.setScene(new Scene(layout, 600, 600));
+        primaryStage.show();
+    }
+
+    private void generarCrucigrama() {
+        String[] palabras = inputPalabras.getText().split(",");
+        if (palabras.length < 4) {
+            mostrarAlerta("Error", "Debes ingresar al menos 4 palabras.");
+            return;
+        }
+
+        for (int i = 0; i < palabras.length; i++) {
+            palabras[i] = palabras[i].trim().toLowerCase(); // limpieza básica
+        }
+
+        int tamanio = 10;
+        try {
+            if (!inputTamanio.getText().isBlank()) {
+                tamanio = Integer.parseInt(inputTamanio.getText());
+            }
+        } catch (NumberFormatException e) {
+            mostrarAlerta("Error", "El tamaño debe ser un número entero.");
+            return;
+        }
+
+        Crucigrama crucigrama = new Crucigrama(palabras, tamanio);
+        mostrarMatriz(crucigrama.matriz);
+    }
+
+    private void mostrarMatriz(char[][] matriz) {
+        grid.getChildren().clear(); // Limpia antes de mostrar
+
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                Label label = new Label((matriz[i][j] == ' ' ? "." : String.valueOf(matriz[i][j])));
+                label.setMinSize(25, 25);
+                label.setStyle("-fx-border-color: #000; -fx-alignment: center;");
+                grid.add(label, j, i);
+            }
+        }
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+}
