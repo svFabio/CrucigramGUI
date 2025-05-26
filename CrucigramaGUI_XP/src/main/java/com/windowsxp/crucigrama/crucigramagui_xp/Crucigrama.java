@@ -76,16 +76,17 @@ public class Crucigrama {
     }
 
     private boolean colocarPalabra(String palabra) {
-        for(int i = 0; i < tamaño; i++) {
-            for(int j = 0; j < tamaño; j++) {
+        // Intentar colocar con cruce
+        for (int i = 0; i < tamaño; i++) {
+            for (int j = 0; j < tamaño; j++) {
                 char letra = matriz[i][j];
-                for(int k = 0; k < palabra.length(); k++) {
-                    if(letra == palabra.charAt(k)) {
-                        if(puedeColocarseVertical(i - k, j, palabra)) {
+                for (int k = 0; k < palabra.length(); k++) {
+                    if (letra == palabra.charAt(k)) {
+                        if (puedeColocarseVertical(i - k, j, palabra)) {
                             colocarVertical(i - k, j, palabra);
                             return true;
                         }
-                        if(puedeColocarseHorizontal(i, j - k, palabra)) {
+                        if (puedeColocarseHorizontal(i, j - k, palabra)) {
                             colocarHorizontal(i, j - k, palabra);
                             return true;
                         }
@@ -93,8 +94,24 @@ public class Crucigrama {
                 }
             }
         }
+
+        // Si no se puede colocar con cruce, intenta colocar en cualquier lugar libre (horizontal primero)
+        for (int i = 0; i < tamaño; i++) {
+            for (int j = 0; j < tamaño; j++) {
+                if (puedeColocarseHorizontal(i, j, palabra)) {
+                    colocarHorizontal(i, j, palabra);
+                    return true;
+                }
+                if (puedeColocarseVertical(i, j, palabra)) {
+                    colocarVertical(i, j, palabra);
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
+
 
     private boolean puedeColocarseVertical(int fila, int col, String palabra) {
         if(fila < 0 || fila + palabra.length() > tamaño) return false;

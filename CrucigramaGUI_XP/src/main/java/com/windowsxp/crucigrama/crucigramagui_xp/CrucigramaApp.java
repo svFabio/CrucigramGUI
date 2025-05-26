@@ -74,9 +74,16 @@ public class CrucigramaApp extends Application{
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
+                char c = matriz[i][j];
                 Label label = new Label((matriz[i][j] == ' ' ? " " : String.valueOf(matriz[i][j])));
                 label.setMinSize(25, 25);
-                label.setStyle("-fx-border-color: #000; -fx-alignment: center;");
+                label.setMaxSize(25, 25);//?
+
+                if(c != ' '){
+                    label.setStyle("-fx-border-color: black; -fx-alignment: center; -fx-font-weight: bold;");
+                }else{
+                    label.setStyle("-fx-background-color: transparent;");
+                }
                 grid.add(label, j, i);
             }
         }
@@ -89,4 +96,6 @@ public class CrucigramaApp extends Application{
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+
 }
