@@ -15,7 +15,7 @@ public class Crucigrama {
         this.matriz = new char[tamaño][tamaño];
         this.palabras = palabras;
         inicializarMatriz();
-        generarCrucigrama   ();
+        generarCrucigrama();
     }
 
     private void inicializarMatriz() {
@@ -60,7 +60,6 @@ public class Crucigrama {
         } while(intercambiado);
     }
 
-    // Los demás métodos permanecen igual...
     private void colocarPrimeraPalabra(String palabra) {
         if(palabra.length() > tamaño){
             System.out.println("Error: la palabra "+palabra +" es demasiado larga para el tablero");
@@ -75,7 +74,12 @@ public class Crucigrama {
         }
     }
 
-    private boolean colocarPalabra(String palabra) {
+    boolean colocarPalabra(String palabra) {
+        if (palabra.length() > tamaño) {
+            System.out.println("Error: la palabra " + palabra + " es demasiado larga para el tablero");
+            return false;
+        }
+
         // Intentar colocar con cruce
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
@@ -95,7 +99,7 @@ public class Crucigrama {
             }
         }
 
-        // Si no se puede colocar con cruce, intenta colocar en cualquier lugar libre (horizontal primero)
+        // Si no se puede colocar con cruce, intenta colocar en cualquier lugar libre
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
                 if (puedeColocarseHorizontal(i, j, palabra)) {
@@ -111,6 +115,7 @@ public class Crucigrama {
 
         return false;
     }
+
 
 
     private boolean puedeColocarseVertical(int fila, int col, String palabra) {

@@ -1,9 +1,9 @@
 package com.windowsxp.crucigrama.crucigramagui_xp;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class CrucigramaTest {
 
@@ -11,72 +11,69 @@ public class CrucigramaTest {
 
     @BeforeEach
     public void setUp() {
-        String[] palabras = {"luz", "sol", "nube", "brisa"};
+        String[] palabras = {"casa", "sol", "luna", "estrella"};
         crucigrama = new Crucigrama(palabras, 10);
     }
 
-    // HU1: Inserción de palabras y ordenamiento
     @Test
-    public void testPalabrasOrdenadasPorLongitud() {
-        String[] palabras = {"sol", "montaña", "sol", "luz", "nube"};
-        Crucigrama c = new Crucigrama(palabras, 10);
-        assertEquals("montaña", c.palabras[0]); // longitud mayor
+    public void testTamañoMinimo() {
+        Crucigrama cruci = new Crucigrama(new String[]{"a", "b", "c", "d"}, 5);
+        assertEquals(10, cruci.getTamaño()); // Debe ajustarse a mínimo 10
     }
 
-    // HU2: Generación automática
     @Test
-    public void testGeneraMatrizConPrimeraPalabra() {
-        String[] palabras = {"montaña", "sol", "luz", "nube"};
-        Crucigrama c = new Crucigrama(palabras, 10);
-        char[][] matriz = c.matriz;
-        boolean contiene = false;
-        for (char ch : matriz[5]) {
-            if (Character.toLowerCase(ch) == 'm') {
-                contiene = true;
-                break;
-            }
-        }
-        assertTrue(contiene);
+    public void testTamañoPersonalizado() {
+        Crucigrama cruci = new Crucigrama(new String[]{"uno", "dos", "tres", "cuatro"}, 15);
+        assertEquals(15, cruci.getTamaño());
     }
 
-    // HU3: Validación de mínimo de palabras (si devuelve mensaje por consola, no se puede testear directamente)
     @Test
-    public void testMenosDeCuatroPalabras() {
-        String[] palabras = {"sol", "luz", "mar"};
-        Crucigrama c = new Crucigrama(palabras, 10);
-        assertEquals(3, c.palabras.length);
-    }
+    public void testPrimeraPalabraCentrada() {
+        String[] palabras = {"palabra", "otra", "mas", "aqui"};
+        Crucigrama cruci = new Crucigrama(palabras, 15);
+        char[][] matriz = cruci.matriz;
+        int filaCentral = 15 / 2;
+        int inicio = (15 - palabras[0].length()) / 2;
 
-    // HU4: Tamaño mínimo de matriz debe ser 10x10
-    @Test
-    public void testMatrizTamanioMinimo10x10() {
-        Crucigrama c = new Crucigrama(new String[]{"sol", "luz", "nube", "aire"}, 5);
-        assertEquals(10, c.getTamaño());
-    }
-
-    // HU6: Evita palabras duplicadas
-    @Test
-    public void testCrucigramaInsertaPalabrasQueSeCruzan() {
-        String[] palabras = {"luz", "nube", "aire", "sol"};
-        Crucigrama c = new Crucigrama(palabras, 10);
-        int letrasColocadas = 0;
-        for (int i = 0; i < c.matriz.length; i++) {
-            for (int j = 0; j < c.matriz[i].length; j++) {
-                if (c.matriz[i][j] != ' ') letrasColocadas++;
-            }
-        }
-        assertTrue(letrasColocadas >= 4); // Se insertó más de una palabra
-    }
-
-    // HU10: Crucigramas distintos para misma entrada
-    @Test
-    public void testInsertaPrimeraPalabraHorizontalEnCentro() {
-        String[] palabras = {"montaña", "aire", "sol", "nube"};
-        Crucigrama c = new Crucigrama(palabras, 10);
-        int filaCentro = c.matriz.length / 2;
-        int colInicio = (10 - palabras[0].length()) / 2;
         for (int i = 0; i < palabras[0].length(); i++) {
-            assertEquals(palabras[0].charAt(i), c.matriz[filaCentro][colInicio + i]);
+            assertEquals(palabras[0].charAt(i), matriz[filaCentral][inicio + i]);
         }
+    }
+
+    @Test
+    public void testOrdenamientoPorLongitud() {
+        String[] palabras = {"sol", "universo", "luna", "estrella"};
+        Crucigrama cruci = new Crucigrama(palabras, 12);
+        String[] ordenado = cruci.palabras;
+
+        assertTrue(ordenado[0].length() >= ordenado[1].length());
+        assertTrue(ordenado[1].length() >= ordenado[2].length());
+        assertTrue(ordenado[2].length() >= ordenado[3].length());
+    }
+
+    @Test
+
+    public void testColocarPalabraMuyLarga() {
+        String[] palabras = {"casa", "perro", "sol", "gato"};
+        Crucigrama crucigrama = new Crucigrama(palabras, 10); // Palabras válidas
+        boolean resultado = crucigrama.colocarPalabra("UMSSLaMejorUniversidad");
+        assertFalse(resultado, "La palabra es demasiado larga para el tablero y no debería colocarse");
+    }
+
+
+    @Test
+    public void testColocacionExitosaDeVariasPalabras() {
+        String[] palabras = {"sol", "luna", "estrella", "astro"};
+        Crucigrama cruci = new Crucigrama(palabras, 12);
+        char[][] matriz = cruci.matriz;
+        int letrasEncontradas = 0;
+        for (char[] fila : matriz) {
+            for (char c : fila) {
+                if (Character.isLetter(c)) {
+                    letrasEncontradas++;
+                }
+            }
+        }
+        assertTrue(letrasEncontradas >= 15);
     }
 }

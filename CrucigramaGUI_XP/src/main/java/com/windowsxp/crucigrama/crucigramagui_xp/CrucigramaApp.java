@@ -1,4 +1,5 @@
 package com.windowsxp.crucigrama.crucigramagui_xp;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -6,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class CrucigramaApp extends Application{
+public class CrucigramaApp extends Application {
     private TextArea inputPalabras;
     private TextField inputTamanio;
     private GridPane grid;
@@ -65,6 +66,14 @@ public class CrucigramaApp extends Application{
             return;
         }
 
+        // Validación de largo de palabras
+        for (String palabra : palabras) {
+            if (palabra.length() > tamanio) {
+                mostrarAlerta("Error", "La palabra '" + palabra + "' es demasiado larga para el tablero de tamaño " + tamanio + ".");
+                return;
+            }
+        }
+
         Crucigrama crucigrama = new Crucigrama(palabras, tamanio);
         mostrarMatriz(crucigrama.matriz);
     }
@@ -77,11 +86,11 @@ public class CrucigramaApp extends Application{
                 char c = matriz[i][j];
                 Label label = new Label((matriz[i][j] == ' ' ? " " : String.valueOf(matriz[i][j])));
                 label.setMinSize(25, 25);
-                label.setMaxSize(25, 25);//?
+                label.setMaxSize(25, 25);
 
-                if(c != ' '){
+                if (c != ' ') {
                     label.setStyle("-fx-border-color: black; -fx-alignment: center; -fx-font-weight: bold;");
-                }else{
+                } else {
                     label.setStyle("-fx-background-color: transparent;");
                 }
                 grid.add(label, j, i);
@@ -96,6 +105,4 @@ public class CrucigramaApp extends Application{
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-
-
 }
