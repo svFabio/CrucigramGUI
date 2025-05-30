@@ -11,12 +11,12 @@ public class Crucigrama {
         } else {
             this.tamaño = tamanito;
         }
-
         this.matriz = new char[tamaño][tamaño];
         this.palabras = palabras;
         inicializarMatriz();
         generarCrucigrama();
     }
+
 
     private void inicializarMatriz() {
         for(int i = 0; i < tamaño; i++) {
@@ -44,7 +44,7 @@ public class Crucigrama {
     }
 
     private void ordenarPalabrasPorLongitud() {
-        // Implementación del método de burbuja para ordenar por longitud descendente
+        // Implementación del metodo de burbuja
         boolean intercambiado;
         do {
             intercambiado = false;

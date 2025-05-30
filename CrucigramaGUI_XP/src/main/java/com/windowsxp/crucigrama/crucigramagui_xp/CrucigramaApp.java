@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class CrucigramaApp extends Application {
+
     private TextArea inputPalabras;
     private TextField inputTamanio;
     private GridPane grid;
@@ -25,8 +26,10 @@ public class CrucigramaApp extends Application {
         inputPalabras.setPromptText("Ingresa palabras separadas por coma (mín. 4)");
 
         // Campo de tamaño del crucigrama
+        //inputTamanio = new TextField();
+        //inputTamanio.setPromptText("Tamaño mínimo 10 (opcional)");
         inputTamanio = new TextField();
-        inputTamanio.setPromptText("Tamaño mínimo 10 (opcional)");
+        inputTamanio.setVisible(false);
 
         // Botón generar
         Button generarBtn = new Button("Generar Crucigrama");
@@ -56,15 +59,7 @@ public class CrucigramaApp extends Application {
             palabras[i] = palabras[i].trim().toLowerCase(); // limpieza básica
         }
 
-        int tamanio = 10;
-        try {
-            if (!inputTamanio.getText().isBlank()) {
-                tamanio = Integer.parseInt(inputTamanio.getText());
-            }
-        } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "El tamaño debe ser un número entero.");
-            return;
-        }
+        int tamanio = calcularTamañoAdecuado(palabras);
 
         // Validación de largo de palabras
         for (String palabra : palabras) {
@@ -104,5 +99,14 @@ public class CrucigramaApp extends Application {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    private int calcularTamañoAdecuado(String[] palabras) {
+        int tamaño = 0;
+        for (String palabra : palabras) {
+            tamaño += palabra.length(); // suma todas las longitudes
+        }
+        tamaño = tamaño / 2; // tamaño base estimado
+        return Math.max(tamaño, 10); // mínimo 10
     }
 }
