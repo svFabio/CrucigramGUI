@@ -61,10 +61,8 @@ public class Crucigrama {
     }
 
     private void colocarPrimeraPalabra(String palabra) {
-        if(palabra.length() > tamaño){
-            System.out.println("Error: la palabra "+palabra +" es demasiado larga para el tablero");
-            return;
-        }
+
+        validarLongitudPalabra(palabra);
 
         int fila = tamaño / 2;
         int inicio = (tamaño - palabra.length()) / 2;
@@ -74,11 +72,19 @@ public class Crucigrama {
         }
     }
 
-    boolean colocarPalabra(String palabra) {
-        if (palabra.length() > tamaño) {
-            System.out.println("Error: la palabra " + palabra + " es demasiado larga para el tablero");
+    private boolean validarLongitudPalabra(String pal) {
+        if (pal.length() > tamaño) {
+            System.out.println("Error: la palabra " + pal + "es demasiado larga para el tablero");
             return false;
         }
+        return true;
+    }
+
+
+
+    boolean colocarPalabra(String palabra) {
+
+        validarLongitudPalabra(palabra);
 
         // Intentar colocar con cruce
         for (int i = 0; i < tamaño; i++) {
