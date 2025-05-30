@@ -80,26 +80,37 @@ public class Crucigrama {
             System.out.println("Error: la palabra " + palabra + " es demasiado larga para el tablero");
             return false;
         }
-        // Intentar colocar con cruce
+        if(intentarColocarConCruce(palabra)) {
+            return true;
+        }
+        return intentarColocarLibremente(palabra);
+    }
+
+    private boolean intentarColocarConCruce(String palabra) {
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
                 char letra = matriz[i][j];
                 for (int k = 0; k < palabra.length(); k++) {
                     if (letra == palabra.charAt(k)) {
-                        if (puedeColocarseVertical(i - k, j, palabra)) {
-                            colocarVertical(i - k, j, palabra);
+                        int filaInicio = i - k;
+                        int colInicio = j - k;
+
+                        if (puedeColocarseVertical(filaInicio, j, palabra)) {
+                            colocarVertical(filaInicio, j, palabra);
                             return true;
                         }
-                        if (puedeColocarseHorizontal(i, j - k, palabra)) {
-                            colocarHorizontal(i, j - k, palabra);
+                        if (puedeColocarseHorizontal(i, colInicio, palabra)) {
+                            colocarHorizontal(i, colInicio, palabra);
                             return true;
                         }
                     }
                 }
             }
         }
+        return false;
+    }
 
-        // Si no se puede colocar con cruce, intenta colocar en cualquier lugar libre
+    private boolean intentarColocarLibremente(String palabra) {
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
                 if (puedeColocarseHorizontal(i, j, palabra)) {
@@ -112,11 +123,8 @@ public class Crucigrama {
                 }
             }
         }
-
         return false;
     }
-
-
 
     private boolean puedeColocarseVertical(int fila, int col, String palabra) {
         if(fila < 0 || fila + palabra.length() > tamaño) return false;
