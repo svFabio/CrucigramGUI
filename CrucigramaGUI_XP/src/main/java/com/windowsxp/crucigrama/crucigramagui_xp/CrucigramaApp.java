@@ -21,8 +21,6 @@ public class CrucigramaApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        System.out.println(getClass().getResource("/com/windowsxp/crucigrama/crucigramagui_xp/crucigrama_layout.fxml"));
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/windowsxp/crucigrama/crucigramagui_xp/crucigrama_layout.fxml"));
         Parent root = loader.load();
 
@@ -34,6 +32,7 @@ public class CrucigramaApp extends Application {
     @FXML
     private void generarCrucigrama() {
         String[] palabras = inputPalabras.getText().split(",");
+
         if (palabras.length < 4) {
             mostrarAlerta("Error", "Debes ingresar al menos 4 palabras.");
             return;
@@ -41,6 +40,12 @@ public class CrucigramaApp extends Application {
 
         for (int i = 0; i < palabras.length; i++) {
             palabras[i] = palabras[i].trim().toLowerCase();
+
+            // Validar 10 caract
+            if (palabras[i].length() > 10) {
+                mostrarAlerta("Error", "La palabra '" + palabras[i] + "' es demasiado larga (max. 10 letras).");
+                return;
+            }
         }
 
         int tamanio = calcularTamañoAdecuado(palabras);
@@ -62,7 +67,7 @@ public class CrucigramaApp extends Application {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 char c = matriz[i][j];
-                Label label = new Label((c == ' ' ? " " : String.valueOf(c)));
+                Label label = new Label(c == ' ' ? " " : String.valueOf(c));
                 label.setMinSize(25, 25);
                 label.setMaxSize(25, 25);
 
