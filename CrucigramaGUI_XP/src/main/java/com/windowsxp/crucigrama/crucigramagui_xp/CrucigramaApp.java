@@ -1,53 +1,37 @@
 package com.windowsxp.crucigrama.crucigramagui_xp;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 public class CrucigramaApp extends Application {
 
-    private TextArea inputPalabras;
-    private TextField inputTamanio;
-    private GridPane grid;
+    @FXML private TextArea inputPalabras;
+    @FXML private TextField inputTamanio;
+    @FXML private GridPane grid;
 
     public static void main(String[] args) {
-        launch(args); // Ejecuta la aplicación JavaFX
+        launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
+        System.out.println(getClass().getResource("/com/windowsxp/crucigrama/crucigramagui_xp/crucigrama_layout.fxml"));
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/windowsxp/crucigrama/crucigramagui_xp/crucigrama_layout.fxml"));
+        Parent root = loader.load();
+
         primaryStage.setTitle("Generador de Crucigrama");
-
-        // Área de ingreso de palabras
-        inputPalabras = new TextArea();
-        inputPalabras.setPromptText("Ingresa palabras separadas por coma (mín. 4)");
-
-        // Campo de tamaño del crucigrama
-        //inputTamanio = new TextField();
-        //inputTamanio.setPromptText("Tamaño mínimo 10 (opcional)");
-        inputTamanio = new TextField();
-        inputTamanio.setVisible(false);
-
-        // Botón generar
-        Button generarBtn = new Button("Generar Crucigrama");
-        generarBtn.setOnAction(e -> generarCrucigrama());
-
-        // Cuadro para mostrar la matriz
-        grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setHgap(5);
-        grid.setVgap(5);
-
-        VBox layout = new VBox(10, inputPalabras, inputTamanio, generarBtn, new ScrollPane(grid));
-        layout.setPadding(new Insets(15));
-
-        primaryStage.setScene(new Scene(layout, 600, 600));
+        primaryStage.setScene(new Scene(root, 600, 600));
         primaryStage.show();
     }
 
+    @FXML
     private void generarCrucigrama() {
         String[] palabras = inputPalabras.getText().split(",");
         if (palabras.length < 4) {
@@ -56,15 +40,14 @@ public class CrucigramaApp extends Application {
         }
 
         for (int i = 0; i < palabras.length; i++) {
-            palabras[i] = palabras[i].trim().toLowerCase(); // limpieza básica
+            palabras[i] = palabras[i].trim().toLowerCase();
         }
 
         int tamanio = calcularTamañoAdecuado(palabras);
 
-        // Validación de largo de palabras
         for (String palabra : palabras) {
             if (palabra.length() > tamanio) {
-                mostrarAlerta("Error", "La palabra '" + palabra + "' es demasiado larga para el tablero de tamaño " + tamanio + ".");
+                mostrarAlerta("Error", "La palabra '" + palabra + "' es demasiado larga para el tablero.");
                 return;
             }
         }
@@ -74,12 +57,12 @@ public class CrucigramaApp extends Application {
     }
 
     private void mostrarMatriz(char[][] matriz) {
-        grid.getChildren().clear(); // Limpia antes de mostrar
+        grid.getChildren().clear();
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 char c = matriz[i][j];
-                Label label = new Label((matriz[i][j] == ' ' ? " " : String.valueOf(matriz[i][j])));
+                Label label = new Label((c == ' ' ? " " : String.valueOf(c)));
                 label.setMinSize(25, 25);
                 label.setMaxSize(25, 25);
 
@@ -104,9 +87,9 @@ public class CrucigramaApp extends Application {
     private int calcularTamañoAdecuado(String[] palabras) {
         int tamaño = 0;
         for (String palabra : palabras) {
-            tamaño += palabra.length(); // suma todas las longitudes
+            tamaño += palabra.length();
         }
-        tamaño = tamaño / 2; // tamaño base estimado
-        return Math.max(tamaño, 10); // mínimo 10
+        tamaño = tamaño / 2;
+        return Math.max(tamaño, 10);
     }
 }
