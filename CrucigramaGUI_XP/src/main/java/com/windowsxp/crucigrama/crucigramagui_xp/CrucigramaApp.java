@@ -46,6 +46,10 @@ public class CrucigramaApp extends Application {
                 mostrarAlerta("Error", "La palabra '" + palabras[i] + "' es demasiado larga (max. 10 letras).");
                 return;
             }
+            if (palabras[i].length() < 3) {
+                mostrarAlerta("Error", "La palabra '" + palabras[i] + "' es demasiado corta (min. 3 letras).");
+                return;
+            }
         }
 
         int tamanio = calcularTamañoAdecuado(palabras);
