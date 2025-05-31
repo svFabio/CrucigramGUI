@@ -42,7 +42,7 @@ public class CrucigramaTest {
 
     @Test
     public void testOrdenamientoPorLongitud() {
-        String[] palabras = {"sol", "universo", "luna", "estrella"};
+        String[] palabras = {"sol", "universo", "luna", "estrella"}; //f
         Crucigrama cruci = new Crucigrama(palabras, 12);
         String[] ordenado = cruci.palabras;
 
