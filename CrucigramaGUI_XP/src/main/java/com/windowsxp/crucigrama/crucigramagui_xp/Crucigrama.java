@@ -6,20 +6,20 @@ public class Crucigrama {
     String[] palabras;
 
     public Crucigrama(String[] palabras, int tamanito) {
-        this.tamaño = tamanito < 10 ? 10 : tamanito;  // Refactorizado
+        this.tamaño = tamanito < 10 ? 10 : tamanito;
         this.matriz = new char[tamaño][tamaño];
         this.palabras = palabras;
-        inicializarMatriz();
-        generarCrucigrama();
+        inicializarMatriz().generarCrucigrama(); // Encadenado
     }
 
 
-    private void inicializarMatriz() {
+    public Crucigrama inicializarMatriz() {
         for(int i = 0; i < tamaño; i++) {
             for(int j = 0; j < tamaño; j++) {
                 matriz[i][j] = ' ';
             }
         }
+        return this;
     }
 
     private void generarCrucigrama() {
@@ -140,16 +140,18 @@ public class Crucigrama {
         return false;
     }
 
-    public void colocarVertical(int fila, int col, String palabra) {
+    public Crucigrama colocarVertical(int fila, int col, String palabra) { //Refactorizado
         for(int i = 0; i < palabra.length(); i++) {
             matriz[fila + i][col] = palabra.charAt(i);
         }
+        return this; // Devuelve la instancia actual
     }
 
-    public void colocarHorizontal(int fila, int col, String palabra) {
+    public Crucigrama colocarHorizontal(int fila, int col, String palabra) {
         for(int i = 0; i < palabra.length(); i++) {
             matriz[fila][col + i] = palabra.charAt(i);
         }
+        return this;
     }
 
     public void imprimirCrucigrama() {
