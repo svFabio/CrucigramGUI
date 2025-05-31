@@ -1,7 +1,5 @@
 package com.windowsxp.crucigrama.crucigramagui_xp;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Crucigrama {
     char[][] matriz;
     private int tamaño;
@@ -61,16 +59,10 @@ public class Crucigrama {
             }
         } while(intercambiado);
     }
-    //Esto lo hizo victor
-    private boolean validarLongitudPalabra(String palabra) { //se agrego un nuevo metodo
-        if (palabra.length() > tamaño) {
-            System.out.println("Error: la palabra " + palabra + " es demasiado larga para el tablero");
-            return false; // Indicar que NO es válida
-        }
-        return true; // Indicar que es válida
-    }
+
     private void colocarPrimeraPalabra(String palabra) {
-        if (!validarLongitudPalabra(palabra)) {
+        if(palabra.length() > tamaño){
+            System.out.println("Error: la palabra "+palabra +" es demasiado larga para el tablero");
             return;
         }
 
@@ -83,7 +75,8 @@ public class Crucigrama {
     }
 
     boolean colocarPalabra(String palabra) {
-        if (!validarLongitudPalabra(palabra)) {
+        if (palabra.length() > tamaño) {
+            System.out.println("Error: la palabra " + palabra + " es demasiado larga para el tablero");
             return false;
         }
 
