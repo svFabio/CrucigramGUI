@@ -76,4 +76,6 @@ public class CrucigramaTest {
         }
         assertTrue(letrasEncontradas >= 15);
     }
+
+
 }
