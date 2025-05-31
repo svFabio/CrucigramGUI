@@ -1,7 +1,7 @@
 package com.windowsxp.crucigrama.crucigramagui_xp;
 
 public class Crucigrama {
-    char[][] matriz;
+    public char [][] matriz;
     private int tamaño;
     String[] palabras;
 
@@ -31,8 +31,8 @@ public class Crucigrama {
             System.out.println("Error: Deben introducirse al menos 4 palabras.");
             return;
         }
-
-        ordenarPalabrasPorLongitud(); // Ahora usa ordenación manual
+        GestordePalabras herramienta = new GestordePalabras();
+        herramienta.ordenarPorLongitud(palabras);
 
         colocarPrimeraPalabra(palabras[0]);
 
@@ -41,23 +41,6 @@ public class Crucigrama {
                 System.out.println("No se pudo colocar la palabra: " + palabras[i]);
             }
         }
-    }
-
-    private void ordenarPalabrasPorLongitud() {
-        // Implementación del metodo de burbuja
-        boolean intercambiado;
-        do {
-            intercambiado = false;
-            for(int i = 0; i < palabras.length - 1; i++) {
-                if(palabras[i].length() < palabras[i+1].length()) {
-                    // Intercambiar palabras
-                    String temp = palabras[i];
-                    palabras[i] = palabras[i+1];
-                    palabras[i+1] = temp;
-                    intercambiado = true;
-                }
-            }
-        } while(intercambiado);
     }
 
     private void colocarPrimeraPalabra(String palabra) {
@@ -80,10 +63,14 @@ public class Crucigrama {
             System.out.println("Error: la palabra " + palabra + " es demasiado larga para el tablero");
             return false;
         }
-        if(intentarColocarConCruce(palabra)) {
+        EstrategiaColocacion conCruce = new ColocacionConCruce();
+        if (conCruce.colocarPalabra(palabra, this)) {
             return true;
         }
-        return intentarColocarLibremente(palabra);
+
+        EstrategiaColocacion libre = new ColocacionLibre();
+        return libre.colocarPalabra(palabra, this);
+
     }
 
     private boolean intentarColocarConCruce(String palabra) {
@@ -126,7 +113,7 @@ public class Crucigrama {
         return false;
     }
 
-    private boolean puedeColocarseVertical(int fila, int col, String palabra) {
+    public boolean puedeColocarseVertical(int fila, int col, String palabra) {
         if(fila < 0 || fila + palabra.length() > tamaño) return false;
         for(int i = 0; i < palabra.length(); i++) {
             char c = matriz[fila + i][col];
@@ -135,7 +122,7 @@ public class Crucigrama {
         return true;
     }
 
-    private boolean puedeColocarseHorizontal(int fila, int col, String palabra) {
+    public boolean puedeColocarseHorizontal(int fila, int col, String palabra) {
         if(col < 0 || col + palabra.length() > tamaño) return false;
         for(int i = 0; i < palabra.length(); i++) {
             char c = matriz[fila][col + i];
@@ -144,13 +131,13 @@ public class Crucigrama {
         return true;
     }
 
-    private void colocarVertical(int fila, int col, String palabra) {
+    public void colocarVertical(int fila, int col, String palabra) {
         for(int i = 0; i < palabra.length(); i++) {
             matriz[fila + i][col] = palabra.charAt(i);
         }
     }
 
-    private void colocarHorizontal(int fila, int col, String palabra) {
+    public void colocarHorizontal(int fila, int col, String palabra) {
         for(int i = 0; i < palabra.length(); i++) {
             matriz[fila][col + i] = palabra.charAt(i);
         }
